@@ -7,7 +7,7 @@ Authors@R:
            role = c("aut", "cre"),
            email = "mickael.canouil@cnrs.fr",
            comment = c(ORCID = "0000-0002-3396-4549"))
-Description: What the package does (one paragraph).
+Description: Several training workshops using the 'learnr' R package.
 License: MIT + file LICENSE
 Depends: R (>= 4.0.0)
 Suggests: 
