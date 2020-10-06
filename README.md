@@ -1,27 +1,27 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# mctw
+# mctrainings
 
 <!-- badges: start -->
 
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![GitHub
-tag](https://img.shields.io/github/tag/mcanouil/mctw.svg?label=latest%20tag&include_prereleases)](https://github.com/mcanouil/mctw)
+tag](https://img.shields.io/github/tag/mcanouil/mctrainings.svg?label=latest%20tag&include_prereleases)](https://github.com/mcanouil/mctrainings)
 [![R build
-status](https://github.com/mcanouil/mctw/workflows/R-CMD-check/badge.svg)](https://github.com/mcanouil/mctw/actions)
+status](https://github.com/mcanouil/mctrainings/workflows/R-CMD-check/badge.svg)](https://github.com/mcanouil/mctrainings/actions)
 <!-- badges: end -->
 
-The goal of mctw is to …
+The goal of mctrainings is to …
 
 ## Installation
 
-You can install the released version of mctw from
+You can install the released version of mctrainings from
 [CRAN](https://CRAN.R-project.org) with:
 
 ``` r
-install.packages("mctw")
+install.packages("mctrainings")
 ```
 
 ## Example
@@ -29,7 +29,7 @@ install.packages("mctw")
 This is a basic example which shows you how to solve a common problem:
 
 ``` r
-library(mctw)
+library(mctrainings)
 ## basic example code
 ```
 
