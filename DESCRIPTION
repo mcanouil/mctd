@@ -1,0 +1,23 @@
+Package: mctd
+Title: Training Workshops from Mickaël Canouil
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Mickaël",
+           family = "Canouil",
+           role = c("aut", "cre"),
+           email = "mickael.canouil@cnrs.fr",
+           comment = c(ORCID = "0000-0002-3396-4549"))
+Description: What the package does (one paragraph).
+License: MIT + file LICENSE
+Depends: R (>= 4.0.0)
+Imports: 
+    learnr (>= 0.10.1),
+    palmerpenguins (>= 0.1.0),
+    ggplot2 (>= 3.3.2),
+    ggtext (>= 0.1.0),
+    scales (>= 1.1.1),
+    patchwork (>= 1.0.1)
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
