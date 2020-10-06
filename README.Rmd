@@ -16,6 +16,9 @@ knitr::opts_chunk$set(
 # mctd
 
 <!-- badges: start -->
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![GitHub tag](https://img.shields.io/github/tag/mcanouil/mctd.svg?label=latest tag&include_prereleases)](https://github.com/mcanouil/mctd)
+[![R build status](https://github.com/mcanouil/mctd/workflows/R-CMD-check/badge.svg)](https://github.com/mcanouil/mctd/actions)
 <!-- badges: end -->
 
 The goal of mctd is to ...
