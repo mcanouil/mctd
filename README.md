@@ -1,21 +1,27 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# mctd
+# mctw
 
 <!-- badges: start -->
 
+[![Lifecycle:
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![GitHub
+tag](https://img.shields.io/github/tag/mcanouil/mctw.svg?label=latest%20tag&include_prereleases)](https://github.com/mcanouil/mctw)
+[![R build
+status](https://github.com/mcanouil/mctw/workflows/R-CMD-check/badge.svg)](https://github.com/mcanouil/mctw/actions)
 <!-- badges: end -->
 
-The goal of mctd is to …
+The goal of mctw is to …
 
 ## Installation
 
-You can install the released version of mctd from
+You can install the released version of mctw from
 [CRAN](https://CRAN.R-project.org) with:
 
 ``` r
-install.packages("mctd")
+install.packages("mctw")
 ```
 
 ## Example
@@ -23,7 +29,7 @@ install.packages("mctd")
 This is a basic example which shows you how to solve a common problem:
 
 ``` r
-library(mctd)
+library(mctw)
 ## basic example code
 ```
 
