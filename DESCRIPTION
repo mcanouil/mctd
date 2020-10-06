@@ -10,7 +10,7 @@ Authors@R:
 Description: What the package does (one paragraph).
 License: MIT + file LICENSE
 Depends: R (>= 4.0.0)
-Imports: 
+Suggests: 
     learnr (>= 0.10.1),
     palmerpenguins (>= 0.1.0),
     ggplot2 (>= 3.3.2),

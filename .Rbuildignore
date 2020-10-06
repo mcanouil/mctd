@@ -1,5 +1,7 @@
 ^mctd\.Rproj$
 ^\.Rproj\.user$
 ^LICENSE\.md$
-^inst/tutorials/td-ggplot2/td-ggplot2\.Rmd$
 ^README\.Rmd$
+^inst/tutorials/td-ggplot2/td-ggplot2\.Rmd$
+^inst/tutorials/td-advanced1/td-advanced1\.Rmd$
+^inst/tutorials/td-advanced2/td-advanced2\.Rmd$
