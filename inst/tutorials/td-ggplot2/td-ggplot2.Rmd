@@ -73,17 +73,20 @@ Ces différents éléments vont interagir et dépendre les uns des autres :
 
 [`ggplot2`](https://ggplot2.tidyverse.org/index.html) est une implémentation (non litéral) de la philosophie exposée dans ["The Grammar of Graphics"](https://www.springer.com/gp/book/9780387245447).
 
-Nous utiliserons plusieurs jeux de données dans la suite de ce tutoriel.  
-Bien que cela ne soit pas obligatoire (`datasets` est une extension native préchargée de R), nous appellerons `data(<dataset>)` avant d'utiliser un nouveau jeu de données.  
-De la même façon, les extensions nécessaires seront indiquées via un appel à `library(<package>)`.
-
-## `ggplot2` "data/mapping/geometries"
+Nous utiliserons le jeu de données `penguins` de l'extension R `palmerpenguins`.  
+De la même façon, les extensions nécessaires sont listées ci-après via un appel à `library(<package>)`.
 
 ```{r ex-setup, echo = TRUE}
 library("ggplot2")
 library("palmerpenguins")
 head(penguins)
 ```
+
+## `ggplot2` "data/mapping/geometries"
+
+### **"aesthetics"** (**"mapping"**)
+
+La fonction `aes()` va contenir l'ensemble des **"aesthetics"** qui dépendent des données, aussi bien pour une utilisation directe ou de façon détournée.
 
 ```{r ex-01, eval = FALSE, echo = TRUE}
 ggplot(
@@ -113,10 +116,6 @@ ggplot(
 ) + 
   geom_point()
 ```
-
-### **"aesthetics"** (**"mapping"**)
-
-La fonction `aes()` va contenir l'ensemble des **"aesthetics"** qui dépendent des données, aussi bien pour une utilisation directe ou de façon détournée.
 
 ```{r ex-03, echo = TRUE}
 ggplot(data = penguins) + 
