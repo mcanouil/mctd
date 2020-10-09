@@ -1,74 +1,206 @@
 ---
-title: "TD - ggplot2 (2 Heures)"
-output: learnr::tutorial
+title: "TD - ggplot2"
+description: "TD de 2 heures autour de l'API [`ggplot2`](https://ggplot2.tidyverse.org/index.html) pour générer des graphiques."
+author: "Mickaël Canouil, *Ph.D.*"
+output: 
+  learnr::tutorial:
+    theme: simplex
+    progressive: true
+    allow_skip: true
 runtime: shiny_prerendered
 ---
 
-```{r setup, include=FALSE}
+```{r setup, include = FALSE}
 library(learnr)
 knitr::opts_chunk$set(echo = FALSE)
+tutorial_options(exercise.eval = TRUE)
 ```
 
+## "The Grammar of Graphics"
 
-## Topic 1
+### Le Livre
 
-### Exercise 
+["The Grammar of Graphics"](https://www.springer.com/gp/book/9780387245447) (Leland Wilkinson) :
 
-*Here's a simple exercise with an empty code chunk provided for entering the answer.*
+* Première édition en 1999.
+* Seconde édition en 2005.
+* Philosophie de structure/nomenclature pour construire des graphiques.
+* Base de plusieurs applications graphiques, comme [`ggplot2`](https://ggplot2.tidyverse.org/index.html).
 
-Write the R code required to add two plus two:
+### L'idée
 
-```{r two-plus-two, exercise=TRUE}
+De quoi est composé un graphique ?
 
+- Thème (**"theme"**)
+- Système de Coordonnées (**"coordinates"**)
+- Facettes (**"facets"**)
+- Géométries (**"geometries"**)
+- Echelles (**"scales"**)
+- Statistiques (**"statistics"**)
+- Configuration/Cartographie (**"mapping"**)
+- Données (**"data"**)
+
+Ces différents éléments vont interagir et dépendre les uns des autres : 
+
+- **"mapping"** : **"data"**
+- **"statistics"** : **"mapping"** + **"scales"**
+- **"scales"** : **"data"** + **"mapping"**
+- **"geometries"** : **"statistics"** + **"scales"**
+- **"coordinates"** : **"geometries"**
+- **"facets"** : **"data"** + **"coordinates"** + **"mapping"**
+
+### La Grammaire
+
+- Données (**"data"**)
+    * Un format donné implique une certaine représentation
+- Configuration/Cartographie (**"mapping"**)
+    * Généralisation des propriétés (**"aesthetic"**) d'un graphique, 
+    c'est-à-dire, l'abscisse, l'ordonnée, la légende, les facettes, etc.
+- Statistiques (**"statistics"**)
+    * Calcul et transformation des données, par exemple, compter les observations pour un histogramme ou calculer les statistiques usuelles d'une boîte à moustaches.
+- Echelles (**"scales"**)
+    * Traduction graphiques des données, par exemple, associer des couleurs aux modalités d'une variable discrète ou associer un gradient de couleur dans le cas d'une variable continue.
+- Géométries (**"geometries"**)
+    * Interprétation graphiques des **"aesthetics"**, par exemple, à partir de **"x"** et **"y"**, est-ce un nuage de point ? Une ligne ? Un polygone ? etc.
+- Facettes (**"facets"**)
+    * Définition d'ensemble ou sous-ensemble des données via une structure en "panneau" ou "grille".
+- Système de Coordonnées (**"coordinates"**)
+    * Interprétation des **"aesthetics"**, tels que **"x"** et **"y"**, pour en définir leur position dans le graphique.
+- Thème (**"theme"**)
+    * Définition de l'esthétique, du style ou de la "beauté du graphique et n'a donc aucun lien avec les données.
+
+## API `ggplot2`
+
+[`ggplot2`](https://ggplot2.tidyverse.org/index.html) est une implémentation (non litéral) de la philosophie exposée dans ["The Grammar of Graphics"](https://www.springer.com/gp/book/9780387245447).
+
+### Environnement
+
+Nous utiliserons plusieurs jeux de données dans la suite de ce tutoriel.  
+Bien que cela ne soit pas obligatoire (`datasets` est une extension native préchargée de R), nous appellerons `data(<dataset>)` avant d'utiliser un nouveau jeu de données.  
+De la même façon, les extensions nécessaires seront indiquées via un appel à `library(<package>)`.
+
+### Graphique de base
+
+```{r ex-setup, echo = TRUE}
+data("faithful")
+library("ggplot2")
+head(faithful)
 ```
 
-### Exercise with Code
+```{r ex-01, eval = FALSE, echo = TRUE}
+ggplot(
+  data = faithful, 
+  mapping = aes(x = eruptions, y = waiting)
+) + 
+  geom_point()
 
-*Here's an exercise with some prepopulated code as well as `exercise.lines = 5` to provide a bit more initial room to work.*
+ggplot(data = faithful) + 
+  aes(x = eruptions, y = waiting) +
+  geom_point()
 
-Now write a function that adds any two numbers and then call it:
-
-```{r add-function, exercise=TRUE, exercise.lines = 5}
-add <- function() {
-  
-}
-```
-
-## Topic 2
-
-### Exercise with Hint
-
-*Here's an exercise where the chunk is pre-evaulated via the `exercise.eval` option (so the user can see the default output we'd like them to customize). We also add a "hint" to the correct solution via the chunk immediate below labeled `print-limit-hint`.*
-
-Modify the following code to limit the number of rows printed to 5:
-
-```{r print-limit, exercise=TRUE, exercise.eval=TRUE}
-mtcars
-```
-
-```{r print-limit-hint}
-head(mtcars)
-```
-
-### Quiz
-
-*You can include any number of single or multiple choice questions as a quiz. Use the `question` function to define a question and the `quiz` function for grouping multiple questions together.*
-
-Some questions to verify that you understand the purposes of various base and recommended R packages:
-
-```{r quiz}
-quiz(
-  question("Which package contains functions for installing other R packages?",
-    answer("base"),
-    answer("tools"),
-    answer("utils", correct = TRUE),
-    answer("codetools")
-  ),
-  question("Which of the R packages listed below are used to create plots?",
-    answer("lattice", correct = TRUE),
-    answer("tools"),
-    answer("stats"),
-    answer("grid", correct = TRUE)
+ggplot() + 
+  geom_point(
+    mapping = aes(x = eruptions, y = waiting),
+    data = faithful
   )
-)
+
+ggplot(data = faithful) + 
+  geom_point(mapping = aes(x = eruptions, y = waiting))
 ```
+
+```{r ex-02, exercise = TRUE, exercise.eval = TRUE}
+ggplot(
+  data = faithful, 
+  mapping = aes(x = eruptions, y = waiting)
+) + 
+  geom_point()
+```
+
+### Modifier les "aesthetics"
+
+La fonction `aes()` va contenir l'ensemble des **"aesthetics"** qui dépendent des données, aussi bien pour une utilisation directe ou de façon détournée.
+
+```{r ex-03, echo = TRUE}
+ggplot(data = faithful) + 
+  geom_point(mapping = aes(x = eruptions, y = waiting, colour = eruptions < 3))
+```
+
+Ici, la couleur est donc définie selon que la valeur de la variable `eruptions` de `faithful` soit ou non strictement inférieure à `3`.  
+Pour définir, une couleur de façon indépendante des données, il suffit de placer cette valeur en dehors de `aes()`.
+
+```{r ex-04, echo = TRUE}
+ggplot(data = faithful) + 
+  geom_point(
+    mapping = aes(x = eruptions, y = waiting),
+    colour = "firebrick"
+  )
+```
+
+Certaines fonctions `geom_*()` (**"geometries"**) utilisent une partie des **"aesthetics"**.
+
+```{r ex-05, echo = TRUE, message = FALSE}
+ggplot(data = faithful) + 
+  geom_histogram(mapping = aes(x = eruptions))
+```
+
+Les `geom_*()` sont tracées dans l'ordre où elles sont ajoutées.
+
+```{r ex-06, exercise = TRUE, exercise.eval = TRUE}
+ggplot(data = faithful, mapping = aes(x = eruptions, y = waiting)) + 
+  geom_density_2d_filled() + 
+  geom_point()
+```
+
+### Mise en Pratique
+
+1. Changer la forme et la taille des points.
+
+```{r ex-07, exercise = TRUE, exercise.eval = TRUE, exercise.lines = 5}
+ggplot(data = faithful) + 
+  geom_point(mapping = aes(x = eruptions, y = waiting))
+```
+
+<div id="ex-07-hint">
+**Indice :** ?geom_point
+</div>
+
+* * *
+
+1. Colorer les deux distributions de l'histogramme en fonction de `eruptions`.
+
+```{r ex-08, exercise = TRUE, exercise.lines = 5}
+ggplot(data = faithful) + 
+  geom_histogram(mapping = aes(x = eruptions))
+```
+
+<div id="ex-08-hint">
+**Indice :** `colour`/`fill`
+</div>
+
+* * *
+
+1. Colorer les deux distributions de l'histogramme en fonction de `waiting`.  
+Que se passe-t-il ?
+
+```{r ex-09, exercise = TRUE, exercise.lines = 5}
+ggplot(data = faithful) + 
+  geom_histogram(mapping = aes(x = eruptions))
+```
+
+<div id="ex-09-hint">
+**Indice 1 :** `colour` ou `fill` ?
+**Indice 2 :** Ajouter `position = 'dodge'` dans `geom_histogram()`. Que contrôle `position` ?
+</div>
+
+* * *
+
+1. Ajouter une ligne verticale qui sépare les deux distributions.
+
+```{r ex-10, exercise = TRUE, exercise.lines = 5}
+ggplot(data = faithful) + 
+  geom_point(mapping = aes(x = eruptions, y = waiting))
+```
+<div id="ex-10-hint">
+**Indice :** `?geom_abline` / `?geom_vline`
+</div>
+
