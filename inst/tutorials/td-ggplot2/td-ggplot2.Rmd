@@ -1,7 +1,7 @@
 ---
 title: "TD - ggplot2"
 description: "TD de 2 heures autour de l'extension 'ggplot2'."
-author: "Micka&euml;l Canouil, *Ph.D.*"
+author: "Mickaël Canouil, *Ph.D.*"
 output: 
   learnr::tutorial:
     theme: simplex
