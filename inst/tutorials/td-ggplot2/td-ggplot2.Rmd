@@ -12,13 +12,13 @@ runtime: shiny_prerendered
 
 ```{r setup, include = FALSE}
 library(learnr)
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 tutorial_options(exercise.eval = TRUE)
 ```
 
-## "The Grammar of Graphics"
+## Introduction
 
-### Le Livre
+### "The Grammar of Graphics" - Le Livre
 
 ["The Grammar of Graphics"](https://www.springer.com/gp/book/9780387245447) (Leland Wilkinson) :
 
@@ -27,7 +27,7 @@ tutorial_options(exercise.eval = TRUE)
 * Philosophie de structure/nomenclature pour construire des graphiques.
 * Base de plusieurs applications graphiques, comme [`ggplot2`](https://ggplot2.tidyverse.org/index.html).
 
-### L'idée
+### "The Grammar of Graphics" - L'idée
 
 De quoi est composé un graphique ?
 
@@ -49,7 +49,7 @@ Ces différents éléments vont interagir et dépendre les uns des autres :
 - **"coordinates"** : **"geometries"**
 - **"facets"** : **"data"** + **"coordinates"** + **"mapping"**
 
-### La Grammaire
+### "The Grammar of Graphics" - La Grammaire
 
 - Données (**"data"**)
     * Un format donné implique une certaine représentation
@@ -61,77 +61,80 @@ Ces différents éléments vont interagir et dépendre les uns des autres :
 - Echelles (**"scales"**)
     * Traduction graphiques des données, par exemple, associer des couleurs aux modalités d'une variable discrète ou associer un gradient de couleur dans le cas d'une variable continue.
 - Géométries (**"geometries"**)
-    * Interprétation graphiques des **"aesthetics"**, par exemple, à partir de **"x"** et **"y"**, est-ce un nuage de point ? Une ligne ? Un polygone ? etc.
+    * Interprétation graphiques des **"aesthetics"**, par exemple, à partir de `x` et `y`, est-ce un nuage de point ? Une ligne ? Un polygone ? etc.
 - Facettes (**"facets"**)
     * Définition d'ensemble ou sous-ensemble des données via une structure en "panneau" ou "grille".
 - Système de Coordonnées (**"coordinates"**)
-    * Interprétation des **"aesthetics"**, tels que **"x"** et **"y"**, pour en définir leur position dans le graphique.
+    * Interprétation des **"aesthetics"**, tels que `x` et `y`, pour en définir leur position dans le graphique.
 - Thème (**"theme"**)
     * Définition de l'esthétique, du style ou de la "beauté du graphique et n'a donc aucun lien avec les données.
 
-## API `ggplot2`
+### API `ggplot2`
 
 [`ggplot2`](https://ggplot2.tidyverse.org/index.html) est une implémentation (non litéral) de la philosophie exposée dans ["The Grammar of Graphics"](https://www.springer.com/gp/book/9780387245447).
-
-### Environnement
 
 Nous utiliserons plusieurs jeux de données dans la suite de ce tutoriel.  
 Bien que cela ne soit pas obligatoire (`datasets` est une extension native préchargée de R), nous appellerons `data(<dataset>)` avant d'utiliser un nouveau jeu de données.  
 De la même façon, les extensions nécessaires seront indiquées via un appel à `library(<package>)`.
 
-### Graphique de base
+## `ggplot2` "data/mapping/geometries"
 
 ```{r ex-setup, echo = TRUE}
-data("faithful")
 library("ggplot2")
-head(faithful)
+library("palmerpenguins")
+head(penguins)
 ```
 
 ```{r ex-01, eval = FALSE, echo = TRUE}
 ggplot(
-  data = faithful, 
-  mapping = aes(x = eruptions, y = waiting)
+  data = penguins, 
+  mapping = aes(x = bill_length_mm, y = bill_depth_mm)
 ) + 
   geom_point()
 
-ggplot(data = faithful) + 
-  aes(x = eruptions, y = waiting) +
+ggplot(data = penguins) + 
+  aes(x = bill_length_mm, y = bill_depth_mm) +
   geom_point()
 
 ggplot() + 
   geom_point(
-    mapping = aes(x = eruptions, y = waiting),
-    data = faithful
+    mapping = aes(x = bill_length_mm, y = bill_depth_mm),
+    data = penguins
   )
 
-ggplot(data = faithful) + 
-  geom_point(mapping = aes(x = eruptions, y = waiting))
+ggplot(data = penguins) + 
+  geom_point(mapping = aes(x = bill_length_mm, y = bill_depth_mm))
 ```
 
 ```{r ex-02, exercise = TRUE, exercise.eval = TRUE}
 ggplot(
-  data = faithful, 
-  mapping = aes(x = eruptions, y = waiting)
+  data = penguins, 
+  mapping = aes(x = bill_length_mm, y = bill_depth_mm)
 ) + 
   geom_point()
 ```
 
-### Modifier les "aesthetics"
+### **"aesthetics"** (**"mapping"**)
 
 La fonction `aes()` va contenir l'ensemble des **"aesthetics"** qui dépendent des données, aussi bien pour une utilisation directe ou de façon détournée.
 
 ```{r ex-03, echo = TRUE}
-ggplot(data = faithful) + 
-  geom_point(mapping = aes(x = eruptions, y = waiting, colour = eruptions < 3))
+ggplot(data = penguins) + 
+  geom_point(
+    mapping = aes(
+      x = bill_length_mm, 
+      y = bill_depth_mm, 
+      colour = bill_length_mm < 45)
+  )
 ```
 
-Ici, la couleur est donc définie selon que la valeur de la variable `eruptions` de `faithful` soit ou non strictement inférieure à `3`.  
+Ici, la couleur est donc définie selon que la valeur de la variable `bill_length_mm` de `penguins` soit ou non strictement inférieure à `45`.  
 Pour définir, une couleur de façon indépendante des données, il suffit de placer cette valeur en dehors de `aes()`.
 
 ```{r ex-04, echo = TRUE}
-ggplot(data = faithful) + 
+ggplot(data = penguins) + 
   geom_point(
-    mapping = aes(x = eruptions, y = waiting),
+    mapping = aes(x = bill_length_mm, y = bill_depth_mm),
     colour = "firebrick"
   )
 ```
@@ -139,25 +142,25 @@ ggplot(data = faithful) +
 Certaines fonctions `geom_*()` (**"geometries"**) utilisent une partie des **"aesthetics"**.
 
 ```{r ex-05, echo = TRUE, message = FALSE}
-ggplot(data = faithful) + 
-  geom_histogram(mapping = aes(x = eruptions))
+ggplot(data = penguins) + 
+  geom_histogram(mapping = aes(x = bill_length_mm))
 ```
 
 Les `geom_*()` sont tracées dans l'ordre où elles sont ajoutées.
 
 ```{r ex-06, exercise = TRUE, exercise.eval = TRUE}
-ggplot(data = faithful, mapping = aes(x = eruptions, y = waiting)) + 
+ggplot(data = penguins, mapping = aes(x = bill_length_mm, y = bill_depth_mm)) + 
   geom_density_2d_filled() + 
   geom_point()
 ```
 
 ### Mise en Pratique
 
-1. Changer la forme et la taille des points.
+#### Changer la forme et la taille des points.
 
 ```{r ex-07, exercise = TRUE, exercise.eval = TRUE, exercise.lines = 5}
-ggplot(data = faithful) + 
-  geom_point(mapping = aes(x = eruptions, y = waiting))
+ggplot(data = penguins) + 
+  geom_point(mapping = aes(x = bill_length_mm, y = bill_depth_mm))
 ```
 
 <div id="ex-07-hint">
@@ -166,11 +169,11 @@ ggplot(data = faithful) +
 
 * * *
 
-1. Colorer les deux distributions de l'histogramme en fonction de `eruptions`.
+#### Colorer les deux distributions de l'histogramme en fonction de `bill_length_mm`.
 
 ```{r ex-08, exercise = TRUE, exercise.lines = 5}
-ggplot(data = faithful) + 
-  geom_histogram(mapping = aes(x = eruptions))
+ggplot(data = penguins) + 
+  geom_histogram(mapping = aes(x = bill_length_mm))
 ```
 
 <div id="ex-08-hint">
@@ -179,28 +182,418 @@ ggplot(data = faithful) +
 
 * * *
 
-1. Colorer les deux distributions de l'histogramme en fonction de `waiting`.  
-Que se passe-t-il ?
+#### Colorer les deux distributions de l'histogramme en fonction de `bill_depth_mm`. Que se passe-t-il ?
 
 ```{r ex-09, exercise = TRUE, exercise.lines = 5}
-ggplot(data = faithful) + 
-  geom_histogram(mapping = aes(x = eruptions))
+ggplot(data = penguins) + 
+  geom_histogram(mapping = aes(x = bill_length_mm))
 ```
 
 <div id="ex-09-hint">
-**Indice 1 :** `colour` ou `fill` ?
+**Indice 1 :** `colour` ou `fill` ?  
 **Indice 2 :** Ajouter `position = 'dodge'` dans `geom_histogram()`. Que contrôle `position` ?
 </div>
 
 * * *
 
-1. Ajouter une ligne verticale qui sépare les deux distributions.
+#### Ajouter une ligne verticale qui sépare les deux distributions.
 
 ```{r ex-10, exercise = TRUE, exercise.lines = 5}
-ggplot(data = faithful) + 
-  geom_point(mapping = aes(x = eruptions, y = waiting))
+ggplot(data = penguins) + 
+  geom_point(mapping = aes(x = bill_length_mm, y = bill_depth_mm))
 ```
 <div id="ex-10-hint">
 **Indice :** `?geom_abline` / `?geom_vline`
 </div>
 
+## `ggplot2` "statistics"
+
+### **"statistics"**
+
+Les **"geometries"** (`geom_*()`) ont une `stat` par défaut, par exemple `geom_bar()` utilise la `stat` `"count"` par défaut.
+
+```{r ex-11, echo = TRUE}
+ggplot(data = penguins) +
+  geom_bar(mapping = aes(x = species))
+```
+
+Il est possible de modifier la `stat` utilisée par défaut.
+
+```{r ex-12, echo = TRUE}
+count_pengouins <- as.data.frame(table(penguins[["species"]]))
+head(count_pengouins)
+ggplot(data = count_pengouins) +
+  geom_bar(mapping = aes(x = Var1, y = Freq), stat = "identity")
+```
+
+A noter, que `geom_col()` correspond à `geom_bar(..., stat = "identity")`.
+
+```{r ex-13, echo = TRUE}
+count_pengouins <- as.data.frame(table(penguins[["species"]]))
+head(count_pengouins)
+ggplot(data = count_pengouins) +
+  geom_col(mapping = aes(x = Var1, y = Freq))
+```
+
+Certaines **"statistics"** proposent des transformations des mêmes calculs, comme pour la `stat`  `"density"`.
+
+```{r ex-14, echo = TRUE}
+ggplot(data = penguins) +
+  geom_density(mapping = aes(x = bill_length_mm))
+```
+
+La fonction `after_stat()` permet d'accèder à ces variantes.
+
+```{r ex-15, echo = TRUE}
+ggplot(data = penguins) +
+  geom_density(mapping = aes(x = bill_length_mm, y = after_stat(scaled)))
+```
+
+Il est également possible d'employer directement les fonctions `stat_*()` en lieu et place de `geom_*(stat = '<stat>')`.
+
+```{r ex-16, echo = TRUE}
+ggplot(data = penguins) +
+  stat_density(mapping = aes(x = bill_length_mm), geom = "line")
+```
+
+### Mise en Pratique
+
+#### Identifier la `stat` utilisée par défaut par `geom_bar()` et remplacer `geom_bar()` par la fonction `stat_*()` correspondante.
+
+```{r ex-17, exercise = TRUE}
+ggplot(data = penguins) +
+  geom_bar(mapping = aes(x = species))
+```
+
+<div id="ex-17-hint">
+**Indice :** `?geom_bar`
+</div>
+
+* * *
+
+#### Ajouter un triangle représentant la moyenne par `species` à l'aide de `stat_summary()`.
+
+```{r ex-18, exercise = TRUE, exercise.lines = 5}
+ggplot(data = penguins) +
+  geom_jitter(mapping = aes(x = species, y = bill_length_mm))
+```
+
+<div id="ex-18-hint">
+**Indice :** Il va falloir changer la valeur par défaut du paramètre `geom` de `stat_summary()`.
+</div>
+
+## `ggplot2` "scales"
+
+### **"scales"**
+
+Chaque **"aesthetic"** est associé à un **"scale"** (`scale_<aesthetic>_<type>()`), qui défini comment est interprété l'**"aesthetic"**.
+
+Le **"scale"** d'une **"aesthetic"** est défini par défaut.
+
+```{r ex-19, echo = TRUE}
+ggplot(data = penguins) + 
+  geom_point(mapping = aes(x = bill_length_mm, y = bill_depth_mm, colour = species))
+```
+
+Il est possible de rendre **"scale"** explicite et d'en prendre le contrôle.
+
+```{r ex-20, echo = TRUE}
+ggplot(data = penguins) + 
+  geom_point(mapping = aes(x = bill_length_mm, y = bill_depth_mm, colour = species)) +
+  scale_colour_discrete()
+```
+
+Ou de le modifier.
+
+```{r ex-21, exercise = TRUE}
+ggplot(data = penguins) + 
+  geom_point(mapping = aes(x = bill_length_mm, y = bill_depth_mm, colour = species)) +
+  scale_colour_viridis_d()
+```
+
+Les **"aesthetics"** de position, comme `x` et `y`, ont également des **"scales"** associés.
+
+```{r ex-22, echo = TRUE}
+ggplot(data = penguins) + 
+  geom_point(mapping = aes(x = bill_length_mm, y = bill_depth_mm)) +
+  scale_x_continuous(trans = "reverse") +
+  scale_y_continuous(name = "Bill Depth (mm)")
+```
+
+### Mise en Pratique
+
+#### Modifier la palette de couleur par une choisie parmi celles de `"brewer"`. `RColorBrewer::display.brewer.all()` pour voir les palettes disponibles.
+
+```{r ex-23, exercise = TRUE, exercise.lines = 5}
+ggplot(data = penguins) + 
+  geom_point(mapping = aes(x = bill_length_mm, y = bill_depth_mm, colour = species))
+```
+
+```{r ex-23-solution}
+ggplot(data = penguins) + 
+  geom_point(mapping = aes(x = bill_length_mm, y = bill_depth_mm, colour = species)) +
+  scale_colour_brewer(type = "qual")
+```
+
+* * *
+
+#### Modifier le code suivant pour que la taille des points représente `flipper_length_mm`. 
+
+```{r ex-24, exercise = TRUE, exercise.lines = 5}
+ggplot(data = penguins) + 
+  geom_point(mapping = aes(x = bill_length_mm, y = bill_depth_mm, colour = species))
+```
+
+```{r ex-24-solution}
+ggplot(data = penguins) + 
+  geom_point(
+    mapping = aes(
+      x = bill_length_mm, 
+      y = bill_depth_mm, 
+      colour = species,
+      size = flipper_length_mm
+    )
+  ) +
+  scale_size()
+```
+
+* * *
+
+#### Faire apparaître dans la légende uniquement deux catégories : inférieur à 200 mm et supérieur à 200 mm. Explorer les différentes `scale_size*()` disponibles.
+
+```{r ex-25, exercise = TRUE, exercise.lines = 5}
+ggplot(data = penguins) + 
+  geom_point(mapping = aes(x = bill_length_mm, y = bill_depth_mm, colour = species))
+```
+
+<div id="ex-25-hint">
+**Indice 1 :** Paramètre `scale_size_binned()`.  
+**Indice 2 :** Paramètre `breaks`.
+</div>
+
+* * *
+
+#### Faire correspondre la couleur avec `flipper_length_mm` à la place de variable discrète `species`. Que se passe-t-il au niveau de la légende ?
+
+```{r ex-26, exercise = TRUE}
+ggplot(data = penguins) + 
+  geom_point(
+    mapping = aes(
+      x = bill_length_mm, 
+      y = bill_depth_mm, 
+      colour = species,
+      size = flipper_length_mm
+    )
+  )
+```
+
+Ajouter `guides(colour = "legend")`, que se passe-t-il ?
+
+## `ggplot2` "facets"
+
+### **"facets"**
+
+`ggplot2` dispose de deux fonctions de découpage : `facet_wrap()` et `facet_grid()` (par défaut, `facet_null()`), permettant une représentation en "panneau" ou "grille" des données selon une même logique (**"aesthetics"**, **"geometries"** et **"statistics"**).
+
+```{r ex-27, echo = TRUE}
+ggplot(data = penguins) + 
+  geom_point(mapping = aes(x = bill_length_mm, y = bill_depth_mm)) +
+  facet_null()
+```
+
+`facet_wrap()` :
+
+```{r ex-28, echo = TRUE}
+ggplot(data = penguins) + 
+  geom_point(mapping = aes(x = bill_length_mm, y = bill_depth_mm)) +
+  facet_wrap(facets = vars(species))
+```
+
+```{r ex-29, echo = TRUE}
+ggplot(data = penguins) + 
+  geom_point(mapping = aes(x = bill_length_mm, y = bill_depth_mm)) +
+  facet_wrap(facets = ~ species)
+```
+
+`facet_grid()` :
+
+```{r ex-30, echo = TRUE}
+ggplot(data = penguins) + 
+  geom_point(mapping = aes(x = bill_length_mm, y = bill_depth_mm)) +
+  facet_grid(rows = vars(island), cols = vars(species))
+```
+
+```{r ex-31, echo = TRUE}
+ggplot(data = penguins) + 
+  geom_point(mapping = aes(x = bill_length_mm, y = bill_depth_mm)) +
+  facet_grid(island ~ species)
+```
+
+### Mise en Pratique
+
+#### Modifier les paramètres de `facet_wrap()`, pour changer la façon dont est construite la grille.
+
+```{r ex-32, exercise = TRUE, exercise.lines = 5}
+ggplot(data = penguins) + 
+  geom_point(mapping = aes(x = bill_length_mm, y = bill_depth_mm)) +
+  facet_wrap(facets = vars(species))
+```
+
+<div id="ex-32-hint">
+**Indice :** Paramètres `rows` et `cols`.
+</div>
+
+* * *
+
+#### Modifier les paramètres de `facet_wrap()`, en particulier au niveau de la gestion des axes `x` et `y`, pour que chacun des panneaux se focalise sur les données de ceux-ci.
+
+```{r ex-33, exercise = TRUE, exercise.lines = 5}
+ggplot(data = penguins) + 
+  geom_point(mapping = aes(x = bill_length_mm, y = bill_depth_mm)) +
+  facet_wrap(facets = vars(species))
+```
+
+<div id="ex-33-hint">
+**Indice :** Paramètre `scales`.
+</div>
+
+* * *
+
+#### Modifier les paramètres de `facet_grid()`, pour avoir des abscisses indépendantes et que la largeur de chaque panneau soit proportionnelle à son abscisse.
+
+```{r ex-34, exercise = TRUE, exercise.lines = 5}
+ggplot(data = penguins) + 
+  geom_point(mapping = aes(x = bill_length_mm, y = bill_depth_mm)) +
+  facet_grid(cols = vars(species))
+```
+
+<div id="ex-34-hint">
+**Indice :** Paramètre `scales` et `space`.
+</div>
+
+* * *
+
+#### Reproduire avec `facet_wrap()` le graphique suivant.
+
+```{r ex-35, exercise = TRUE, exercise.lines = 5}
+ggplot(data = penguins) + 
+  geom_point(mapping = aes(x = bill_length_mm, y = bill_depth_mm)) +
+  facet_grid(rows = vars(island), cols = vars(species))
+```
+
+## `ggplot2` "coordinates"
+
+### **"coordinates"**
+
+Le système de coordonnées féfini l'interprétation des **"aesthetics"** `x` et `y` ( `coord_*()`).
+
+Par défaut, le système `coord_cartesian()` est utilisé.
+
+```{r ex-36, echo = TRUE}
+ggplot(data = penguins) + 
+  geom_point(mapping = aes(x = bill_length_mm, y = bill_depth_mm)) +
+  coord_cartesian()
+```
+
+Pour passer à un système en coordonnées polaires, il y a  `coord_polar()`.
+
+```{r ex-37, echo = TRUE}
+ggplot(data = penguins) + 
+  geom_point(mapping = aes(x = bill_length_mm, y = bill_depth_mm)) +
+  coord_polar()
+```
+
+```{r ex-38, echo = TRUE}
+ggplot(data = penguins) + 
+  geom_bar(mapping = aes(x = species)) +
+  coord_polar(theta = "y")
+```
+
+Le système de coordonnées permet également de modifier les limites des données ou les limites de l'affichage des données.
+
+```{r ex-39, echo = TRUE}
+ggplot(data = penguins) + 
+  geom_point(mapping = aes(x = bill_length_mm, y = bill_depth_mm)) +
+  expand_limits(y = 100)
+```
+
+```{r ex-40, echo = TRUE}
+ggplot(data = penguins) + 
+  geom_point(mapping = aes(x = bill_length_mm, y = bill_depth_mm)) +
+  lims(y = c(NA, 100))
+```
+
+```{r ex-41, echo = TRUE}
+ggplot(data = penguins) + 
+  geom_point(mapping = aes(x = bill_length_mm, y = bill_depth_mm)) +
+  scale_y_continuous(limits = c(NA, 100))
+```
+
+Pour agrandir une zone du graphique, l'usage de `coord_cartesian()` est préférable.
+
+```{r ex-42, echo = TRUE}
+p <- ggplot(data = penguins, mapping = aes(x = bill_length_mm, y = bill_depth_mm)) + 
+  geom_point() +
+  stat_smooth()
+p
+```
+
+```{r ex-43, echo = TRUE}
+p + lims(y = c(18, 20))
+```
+
+```{r ex-44, echo = TRUE}
+p + scale_y_continuous(limits = c(18, 20))
+```
+
+```{r ex-45, echo = TRUE}
+p + coord_cartesian(ylim = c(18, 20))
+```
+
+### Mise en Pratique
+
+#### Réaliser un diagramme circulaire (le fameux "camembert"), représentant les effectifs par `species`.
+
+```{r ex-46, exercise = TRUE, exercise.lines = 5}
+ggplot(data = penguins)
+```
+
+```{r ex-46-solution}
+ggplot(data = penguins) +
+  geom_bar(mapping = aes(x = "penguins", fill = species)) +
+  coord_polar(theta = "y")
+```
+
+* * *
+
+#### Les fonctions `coord_*()`, permettent également en plus de modifier les limites, de transformer les **"aesthetics"** avec `coord_trans()` (équivalent au paramètre `trans` des fonctions `scale_*()`). afficher les axes `x` et `y` de façon décroissante.
+
+```{r ex-47, exercise = TRUE, exercise.lines = 5}
+ggplot(data = penguins) + 
+  geom_point(mapping = aes(x = bill_length_mm, y = bill_depth_mm))
+```
+
+<div id="ex-47-hint">
+**Indice :** Transformation `"reverse"`.
+</div>
+
+* * *
+
+#### Explorer les autres fonctions `coord_*()` disponibles.
+
+## `ggplot2` "theme"
+
+### **"theme"**
+
+* Définition des éléments (`theme()`) de style d'un graphique, par exemple, la taille de police, la couleur de remplissage du canvas.
+* Structuration hiérarchiques des éléments (notion d'héritage des propriètés).
+
+### Mise en Pratique
+
+## Avertissement
+
+Ce tutoriel est inspiré du "Workshop" de Thomas Lin Pedersen.
+
+![](https://youtu.be/h29g21z0a68){width="50%"}
+
+![](https://youtu.be/0m4yywqNPVY){width="50%"}
