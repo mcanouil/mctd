@@ -1,5 +1,5 @@
 Package: mctrainings
-Title: Training Workshops from Mickaël Canouil
+Title: Training Workshops
 Version: 0.0.0.9000
 Authors@R: 
     person(given = "Mickaël",
