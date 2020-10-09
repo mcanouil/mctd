@@ -17,5 +17,18 @@ status](https://github.com/mcanouil/mctrainings/workflows/R-CMD-check/badge.svg)
 
 ``` r
 remotes::install_github("mcanouil/mctrainings")
-learnr::run_tutorial("td-ggplot2", package = "mctrainings")
 ```
+
+## TD - ggplot2
+
+Three ways to access the tutorial:
+
+  - On <https://mcanouil.shinyapps.io/td-ggplot2/>
+
+  - In RStudio (\>= 1.3), in the “Tutorial” panel under “TD - ggplot2”.
+
+  - In a interactive R session, using:
+    
+    ``` r
+    learnr::run_tutorial("td-ggplot2", package = "mctrainings")
+    ```
