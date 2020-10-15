@@ -35,7 +35,7 @@ De quoi est composé un graphique ?
 - Système de Coordonnées (**"coordinates"**)
 - Facettes (**"facets"**)
 - Géométries (**"geometries"**)
-- Echelles (**"scales"**)
+- Échelles (**"scales"**)
 - Statistiques (**"statistics"**)
 - Configuration/Cartographie (**"mapping"**)
 - Données (**"data"**)
@@ -58,7 +58,7 @@ Ces différents éléments vont interagir et dépendre les uns des autres :
     c'est-à-dire, l'abscisse, l'ordonnée, la légende, les facettes, etc.
 - Statistiques (**"statistics"**)
     * Calcul et transformation des données, par exemple, compter les observations pour un histogramme ou calculer les statistiques usuelles d'une boîte à moustaches.
-- Echelles (**"scales"**)
+- Échelles (**"scales"**)
     * Traduction graphiques des données, par exemple, associer des couleurs aux modalités d'une variable discrète ou associer un gradient de couleur dans le cas d'une variable continue.
 - Géométries (**"geometries"**)
     * Interprétation graphiques des **"aesthetics"**, par exemple, à partir de `x` et `y`, est-ce un nuage de point ? Une ligne ? Un polygone ? etc.
@@ -71,13 +71,16 @@ Ces différents éléments vont interagir et dépendre les uns des autres :
 
 ### API `ggplot2`
 
-[`ggplot2`](https://ggplot2.tidyverse.org/index.html) est une implémentation (non litéral) de la philosophie exposée dans ["The Grammar of Graphics"](https://www.springer.com/gp/book/9780387245447).
+[`ggplot2`](https://ggplot2.tidyverse.org/index.html) est une implémentation (non littéral) de la philosophie exposée dans ["The Grammar of Graphics"](https://www.springer.com/gp/book/9780387245447).
 
 Nous utiliserons le jeu de données `penguins` de l'extension R `palmerpenguins`.  
 De la même façon, les extensions nécessaires sont listées ci-après via un appel à `library(<package>)`.
 
 ```{r ex-setup, echo = TRUE}
 library("ggplot2")
+library("scales")
+library("ggtext")
+library("patchwork")
 library("palmerpenguins")
 head(penguins)
 ```
@@ -484,7 +487,7 @@ ggplot(data = penguins) +
 
 ### **"coordinates"**
 
-Le système de coordonnées féfini l'interprétation des **"aesthetics"** `x` et `y` ( `coord_*()`).
+Le système de coordonnées défini l'interprétation des **"aesthetics"** `x` et `y` ( `coord_*()`).
 
 Par défaut, le système `coord_cartesian()` est utilisé.
 
@@ -584,8 +587,8 @@ ggplot(data = penguins) +
 
 ### **"theme"**
 
-* Définition des éléments (`theme()`) de style d'un graphique, par exemple, la taille de police, la couleur de remplissage du canvas.
-* Structuration hiérarchiques des éléments (notion d'héritage des propriètés).
+* Définition des éléments (`theme()`) de style d'un graphique, par exemple, la taille de police, la couleur de remplissage du canevas.
+* Structuration hiérarchiques des éléments (notion d'héritage des propretés).
 
 ### Mise en Pratique
 
