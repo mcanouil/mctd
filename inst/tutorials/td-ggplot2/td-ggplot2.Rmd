@@ -78,8 +78,6 @@ De la même façon, les extensions nécessaires sont listées ci-après via un a
 
 ```{r ex-setup}
 library("ggplot2")
-library("scales")
-library("ggtext")
 library("patchwork")
 library("palmerpenguins")
 head(penguins)
@@ -733,6 +731,7 @@ En voici quelques-unes proposant principalement des fonctions `geom_*()`:
 * [`ggbeeswarm`](https://cran.r-project.org/package=ggbeeswarm) 
 * [`ggforce`](https://cran.r-project.org/package=ggforce)
 * [`ggrepel`](https://cran.r-project.org/package=ggrepel)
+* [`ggtext`](https://cran.r-project.org/package=ggtext)
 
 
 ```{r ex-57, exercise = TRUE}
@@ -748,9 +747,9 @@ D'autres, apportent des thèmes et des fonctionnalités pour combiner plusieurs 
 * [`ggpubr`](https://cran.r-project.org/package=ggpubr)
 * [`patchwork`](https://cran.r-project.org/package=patchwork)
 
-```{r ex-58}
-library("ggpubr")
-ggarrange(p + theme_classic2(), p)
+```{r ex-58, eval = FALSE}
+# library("ggpubr")
+ggpubr::ggarrange(p + ggpubr::theme_classic2(), p)
 ```
 
 ```{r ex-59}
