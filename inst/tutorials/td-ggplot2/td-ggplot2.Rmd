@@ -89,10 +89,9 @@ head(penguins)
 theme_set(theme_light())
 ```
 
+## "data/mapping/geometries"
 
-## `ggplot2` - "data/mapping/geometries"
-
-### **"aesthetics"** (**"mapping"**)
+### {}
 
 La fonction `aes()` va contenir l'ensemble des **"aesthetics"** qui dépendent des données, aussi bien pour une utilisation directe ou de façon détournée.
 
@@ -213,9 +212,9 @@ ggplot(data = penguins) +
 **Indice :** `?geom_abline` / `?geom_vline`
 </div>
 
-## `ggplot2` - "statistics"
+## "statistics"
 
-### **"statistics"**
+### {}
 
 Les **"geometries"** (`geom_*()`) ont une `stat` par défaut, par exemple `geom_bar()` utilise la `stat` `"count"` par défaut.
 
@@ -289,9 +288,9 @@ ggplot(data = penguins) +
 **Indice :** Il va falloir changer la valeur par défaut du paramètre `geom` de `stat_summary()`.
 </div>
 
-## `ggplot2` - "scales"
+##"scales"
 
-### **"scales"**
+### {}
 
 Chaque **"aesthetic"** est associé à un **"scale"** (`scale_<aesthetic>_<type>()`), qui défini comment est interprété l'**"aesthetic"**.
 
@@ -396,9 +395,9 @@ ggplot(data = penguins) +
 
 Ajouter `guides(colour = "legend")`, que se passe-t-il ?
 
-## `ggplot2` - "facets"
+## "facets"
 
-### **"facets"**
+### {}
 
 `ggplot2` dispose de deux fonctions de découpage : `facet_wrap()` et `facet_grid()` (par défaut, `facet_null()`), permettant une représentation en "panneau" ou "grille" des données selon une même logique (**"aesthetics"**, **"geometries"** et **"statistics"**).
 
@@ -488,9 +487,9 @@ ggplot(data = penguins) +
   facet_grid(rows = vars(island), cols = vars(species))
 ```
 
-## `ggplot2` - "coordinates"
+## "coordinates"
 
-### **"coordinates"**
+### {}
 
 Le système de coordonnées défini l'interprétation des **"aesthetics"** `x` et `y` ( `coord_*()`).
 
@@ -588,14 +587,214 @@ ggplot(data = penguins) +
 
 #### Explorer les autres fonctions `coord_*()` disponibles.
 
-## `ggplot2` - "theme"
+## "theme"
 
-### **"theme"**
+### {}
 
-* Définition des éléments (`theme()`) de style d'un graphique, par exemple, la taille de police, la couleur de remplissage du canevas.
-* Structuration hiérarchiques des éléments (notion d'héritage des propretés).
+Le thème (`theme()`) contrôle les éléments du graphique indépendants des données, par exemple, la taille de police.
+
+```{r ex-48, eval = FALSE, echo = TRUE}
+theme_light(
+  base_size = ..., 
+  base_family = ...
+)
+```
+
+`ggplot2` propose plusieurs thèmes complets (c.-à-d., dont tous les éléments sont définis avec une valeur par défaut) :
+
+* `theme_grey()`
+* `theme_gray()`
+* `theme_bw()`
+* `theme_linedraw()`
+* `theme_light()`, celui utilisé dans ce document.
+* `theme_dark()`
+* `theme_minimal()`
+* `theme_classic()`
+* `theme_void()`
+* `theme_test()`
+
+```{r ex-49, echo = TRUE}
+p <- ggplot(data = penguins) +
+  geom_bar(mapping = aes(x = species))
+
+p + theme_light()
+
+p + theme_linedraw()
+
+p + theme_void()
+```
+
+Il est possible de définir un thème `ggplot2` pour l'ensemble d'une session R ou d'un script R/Rmd avec `theme_set()`.
+
+```{r ex-50, echo = TRUE}
+theme_set(theme_dark())
+p
+theme_set(theme_light())
+p
+```
+
+Les différents éléments constituant un thème suivent une structure hiérarchique, avec une notion d'héritage des propriétés.
+
+Il existe quatre structures ou éléments de base dans un thème `ggplot2` :
+
+* `element_blank()`, un élément "vide".
+* `element_rect()`, un élément de type rectangle.
+* `element_line()`, un élément de type ligne.
+* `element_text()`, un élément de type texte.
+
+À cela s'ajoute deux autres éléments de base :
+* `margin()`, pour définir des marges.
+* `rel()`, pour définir la taille relativement à l'élément parent.
+
+Avec `theme()` et les éléments cités, il est possible de modifier uniquement un aspect en particulier d'un graphique.
+
+```{r ex-51, exercise = TRUE}
+p +
+  theme(
+    axis.title.x = element_blank(),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor.x = element_blank(),
+    panel.border = element_blank()
+  )
+```
+
+La fonction générique `labs()` permet de définir l'ensemble des éléments de titres, par exemple, titre de légende, titre des axes et bien entendu le titre et le sous-titre du graphique.
+
+```{r ex-52, exercise = TRUE}
+p +
+  aes(fill = species) +
+  labs(
+    x = NULL,
+    y = "Effectif",
+    fill = "Espèce",
+    title = "Répartition des Espèces de Pengouins",
+    subtitle = "(Toutes localisations confondues)"
+  )
+```
+
+Recommandation de lecture : [Fundamentals of Data Visualization](https://clauswilke.com/dataviz/index.html) de Claus O. Wilke.
 
 ### Mise en Pratique
+
+#### Reproduire le graphique ci-dessous.
+
+```{r ex-53, echo = FALSE, eval = TRUE}
+ggplot(data = penguins) +
+  geom_bar(mapping = aes(x = "penguins", fill = species)) +
+  coord_polar(theta = "y") +
+  theme(
+    axis.title = element_blank(),
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    panel.border = element_blank(),
+    panel.grid = element_blank(), 
+    legend.position = "top"
+  )
+```
+
+```{r ex-54, exercise = TRUE, exercise.lines = 5}
+ggplot(data = penguins)
+```
+
+* * *
+
+#### Corriger les différents "problèmes" du graphique ci dessous.
+
+```{r ex-55, echo = FALSE, eval = TRUE}
+p54 <- ggplot(data = penguins) +
+  geom_bar(mapping = aes(x = "penguins", fill = species)) +
+  coord_polar(theta = "y") +
+  theme(
+    text = element_text(colour = "red"), 
+    plot.background = element_rect(fill = "grey"),
+    legend.background = element_rect(colour = "firebrick", fill = "goldenrod"), 
+    axis.text.x = element_text(angle = 180), 
+    legend.text = element_text(angle = 180)
+  )
+```
+
+```{r ex-56, exercise = TRUE, exercise.lines = 5}
+p54 + theme(
+  
+  
+  
+)
+```
+
+## L'écosystème autour
+
+### {}
+
+Il existe un nombre toujours croissant d'extension à l'API `ggplot2`, dont le nom débute très souvent par `gg`.  
+En voici quelques-unes proposant principalement des fonctions `geom_*()`:
+
+* [`gganimate`](https://cran.r-project.org/package=gganimate)
+* [`ggbeeswarm`](https://cran.r-project.org/package=ggbeeswarm) 
+* [`ggforce`](https://cran.r-project.org/package=ggforce)
+* [`ggrepel`](https://cran.r-project.org/package=ggrepel)
+
+
+```{r ex-57, exercise = TRUE}
+library("ggforce")
+p <- ggplot(data = na.exclude(penguins)) + 
+  aes(x = bill_length_mm, y = bill_depth_mm) +
+  geom_point(mapping = aes(colour = species)) +
+  geom_mark_ellipse(mapping = aes(fill = island, label = island))
+p
+```
+
+D'autres, apportent des thèmes et des fonctionnalités pour combiner plusieurs graphiques : 
+* [`ggpubr`](https://cran.r-project.org/package=ggpubr)
+* [`patchwork`](https://cran.r-project.org/package=patchwork)
+
+```{r ex-58, echo = TRUE}
+library("ggpubr")
+ggarrange(p + theme_classic2(), p)
+```
+
+```{r ex-59, echo = TRUE}
+library("patchwork")
+p1 <- ggplot(data = penguins) +
+  aes(y = sex, fill = species) +
+  geom_bar(alpha = 0.8, orientation = "y", position = "dodge") +
+  facet_wrap(facets = vars(species), ncol = 1)
+
+p2 <- ggplot(data = penguins) +
+  aes(x = flipper_length_mm, y = body_mass_g, colour = species, shape = species) +
+  geom_point(size = 2)
+  
+p3 <- ggplot(data = penguins) +
+  aes(x = flipper_length_mm, y = bill_depth_mm, colour = species, shape = species) +
+  geom_point(size = 2)
+
+p4 <- ggplot(data = penguins) +
+  aes(x = species, y = bill_length_mm, colour = species) +
+  geom_jitter(width = 0.1, alpha = 0.7, show.legend = FALSE) 
+
+p5 <- ggplot(data = penguins) +
+  aes(x = flipper_length_mm, fill = species) +
+  geom_histogram(alpha = 0.5, position = "identity")
+```
+
+```{r ex-60, echo = TRUE}
+p1 + p2 + p3 + p4 + p5
+```
+
+```{r ex-61, echo = TRUE}
+wrap_plots(p1, p2, p3, p4, p5, ncol = 2, nrow = 3, guides = "collect")
+```
+
+### Mise en Pratique
+
+#### Formater et combiner trois figures, basées sur le jeu de données `penguins` et combiner les. Le graphique obtenu ne doit présenter qu'une seule et unique légende indiquant l'espèce (ou l'île).
+
+```{r ex-62, exercise = TRUE, exercise.lines = 5}
+
+```
+
+<div id="ex-62-hint">
+**Indice :** [patchwork.data-imaginist.com](https://patchwork.data-imaginist.com/).
+</div>
 
 ## Avertissement
 
