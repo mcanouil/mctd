@@ -12,8 +12,8 @@ runtime: shiny_prerendered
 
 ```{r setup, include = FALSE}
 library(learnr)
-knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
-tutorial_options(exercise.eval = TRUE)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+# tutorial_options(exercise.eval = FALSE)
 ```
 
 ## Introduction
@@ -76,7 +76,7 @@ Ces différents éléments vont interagir et dépendre les uns des autres :
 Nous utiliserons le jeu de données `penguins` de l'extension R `palmerpenguins`.  
 De la même façon, les extensions nécessaires sont listées ci-après via un appel à `library(<package>)`.
 
-```{r ex-setup, echo = TRUE}
+```{r ex-setup}
 library("ggplot2")
 library("scales")
 library("ggtext")
@@ -95,7 +95,7 @@ theme_set(theme_light())
 
 La fonction `aes()` va contenir l'ensemble des **"aesthetics"** qui dépendent des données, aussi bien pour une utilisation directe ou de façon détournée.
 
-```{r ex-01, eval = FALSE, echo = TRUE}
+```{r ex-01, eval = FALSE}
 ggplot(
   data = penguins, 
   mapping = aes(x = bill_length_mm, y = bill_depth_mm)
@@ -116,7 +116,7 @@ ggplot(data = penguins) +
   geom_point(mapping = aes(x = bill_length_mm, y = bill_depth_mm))
 ```
 
-```{r ex-02, exercise = TRUE, exercise.eval = TRUE}
+```{r ex-02, exercise = TRUE}
 ggplot(
   data = penguins, 
   mapping = aes(x = bill_length_mm, y = bill_depth_mm)
@@ -124,7 +124,7 @@ ggplot(
   geom_point()
 ```
 
-```{r ex-03, echo = TRUE}
+```{r ex-03}
 ggplot(data = penguins) + 
   geom_point(
     mapping = aes(
@@ -137,7 +137,7 @@ ggplot(data = penguins) +
 Ici, la couleur est donc définie selon que la valeur de la variable `bill_length_mm` de `penguins` soit ou non strictement inférieure à `45`.  
 Pour définir, une couleur de façon indépendante des données, il suffit de placer cette valeur en dehors de `aes()`.
 
-```{r ex-04, echo = TRUE}
+```{r ex-04}
 ggplot(data = penguins) + 
   geom_point(
     mapping = aes(x = bill_length_mm, y = bill_depth_mm),
@@ -147,14 +147,14 @@ ggplot(data = penguins) +
 
 Certaines fonctions `geom_*()` (**"geometries"**) utilisent une partie des **"aesthetics"**.
 
-```{r ex-05, echo = TRUE, message = FALSE}
+```{r ex-05}
 ggplot(data = penguins) + 
   geom_histogram(mapping = aes(x = bill_length_mm))
 ```
 
 Les `geom_*()` sont tracées dans l'ordre où elles sont ajoutées.
 
-```{r ex-06, exercise = TRUE, exercise.eval = TRUE}
+```{r ex-06, exercise = TRUE}
 ggplot(data = penguins, mapping = aes(x = bill_length_mm, y = bill_depth_mm)) + 
   geom_density_2d_filled() + 
   geom_point()
@@ -164,7 +164,7 @@ ggplot(data = penguins, mapping = aes(x = bill_length_mm, y = bill_depth_mm)) +
 
 #### Changer la forme et la taille des points.
 
-```{r ex-07, exercise = TRUE, exercise.eval = TRUE, exercise.lines = 5}
+```{r ex-07, exercise = TRUE, exercise.lines = 5}
 ggplot(data = penguins) + 
   geom_point(mapping = aes(x = bill_length_mm, y = bill_depth_mm))
 ```
@@ -218,14 +218,14 @@ ggplot(data = penguins) +
 
 Les **"geometries"** (`geom_*()`) ont une `stat` par défaut, par exemple `geom_bar()` utilise la `stat` `"count"` par défaut.
 
-```{r ex-11, echo = TRUE}
+```{r ex-11}
 ggplot(data = penguins) +
   geom_bar(mapping = aes(x = species))
 ```
 
 Il est possible de modifier la `stat` utilisée par défaut.
 
-```{r ex-12, echo = TRUE}
+```{r ex-12}
 count_pengouins <- as.data.frame(table(penguins[["species"]]))
 head(count_pengouins)
 ggplot(data = count_pengouins) +
@@ -234,7 +234,7 @@ ggplot(data = count_pengouins) +
 
 A noter, que `geom_col()` correspond à `geom_bar(..., stat = "identity")`.
 
-```{r ex-13, echo = TRUE}
+```{r ex-13}
 count_pengouins <- as.data.frame(table(penguins[["species"]]))
 head(count_pengouins)
 ggplot(data = count_pengouins) +
@@ -243,21 +243,21 @@ ggplot(data = count_pengouins) +
 
 Certaines **"statistics"** proposent des transformations des mêmes calculs, comme pour la `stat`  `"density"`.
 
-```{r ex-14, echo = TRUE}
+```{r ex-14}
 ggplot(data = penguins) +
   geom_density(mapping = aes(x = bill_length_mm))
 ```
 
 La fonction `after_stat()` permet d'accèder à ces variantes.
 
-```{r ex-15, echo = TRUE}
+```{r ex-15}
 ggplot(data = penguins) +
   geom_density(mapping = aes(x = bill_length_mm, y = after_stat(scaled)))
 ```
 
 Il est également possible d'employer directement les fonctions `stat_*()` en lieu et place de `geom_*(stat = '<stat>')`.
 
-```{r ex-16, echo = TRUE}
+```{r ex-16}
 ggplot(data = penguins) +
   stat_density(mapping = aes(x = bill_length_mm), geom = "line")
 ```
@@ -296,14 +296,14 @@ Chaque **"aesthetic"** est associé à un **"scale"** (`scale_<aesthetic>_<type>
 
 Le **"scale"** d'une **"aesthetic"** est défini par défaut.
 
-```{r ex-19, echo = TRUE}
+```{r ex-19}
 ggplot(data = penguins) + 
   geom_point(mapping = aes(x = bill_length_mm, y = bill_depth_mm, colour = species))
 ```
 
 Il est possible de rendre **"scale"** explicite et d'en prendre le contrôle.
 
-```{r ex-20, echo = TRUE}
+```{r ex-20}
 ggplot(data = penguins) + 
   geom_point(mapping = aes(x = bill_length_mm, y = bill_depth_mm, colour = species)) +
   scale_colour_discrete()
@@ -319,7 +319,7 @@ ggplot(data = penguins) +
 
 Les **"aesthetics"** de position, comme `x` et `y`, ont également des **"scales"** associés.
 
-```{r ex-22, echo = TRUE}
+```{r ex-22}
 ggplot(data = penguins) + 
   geom_point(mapping = aes(x = bill_length_mm, y = bill_depth_mm)) +
   scale_x_continuous(trans = "reverse") +
@@ -401,7 +401,7 @@ Ajouter `guides(colour = "legend")`, que se passe-t-il ?
 
 `ggplot2` dispose de deux fonctions de découpage : `facet_wrap()` et `facet_grid()` (par défaut, `facet_null()`), permettant une représentation en "panneau" ou "grille" des données selon une même logique (**"aesthetics"**, **"geometries"** et **"statistics"**).
 
-```{r ex-27, echo = TRUE}
+```{r ex-27}
 ggplot(data = penguins) + 
   geom_point(mapping = aes(x = bill_length_mm, y = bill_depth_mm)) +
   facet_null()
@@ -409,13 +409,13 @@ ggplot(data = penguins) +
 
 `facet_wrap()` :
 
-```{r ex-28, echo = TRUE}
+```{r ex-28}
 ggplot(data = penguins) + 
   geom_point(mapping = aes(x = bill_length_mm, y = bill_depth_mm)) +
   facet_wrap(facets = vars(species))
 ```
 
-```{r ex-29, echo = TRUE}
+```{r ex-29}
 ggplot(data = penguins) + 
   geom_point(mapping = aes(x = bill_length_mm, y = bill_depth_mm)) +
   facet_wrap(facets = ~ species)
@@ -423,13 +423,13 @@ ggplot(data = penguins) +
 
 `facet_grid()` :
 
-```{r ex-30, echo = TRUE}
+```{r ex-30}
 ggplot(data = penguins) + 
   geom_point(mapping = aes(x = bill_length_mm, y = bill_depth_mm)) +
   facet_grid(rows = vars(island), cols = vars(species))
 ```
 
-```{r ex-31, echo = TRUE}
+```{r ex-31}
 ggplot(data = penguins) + 
   geom_point(mapping = aes(x = bill_length_mm, y = bill_depth_mm)) +
   facet_grid(island ~ species)
@@ -495,7 +495,7 @@ Le système de coordonnées défini l'interprétation des **"aesthetics"** `x` e
 
 Par défaut, le système `coord_cartesian()` est utilisé.
 
-```{r ex-36, echo = TRUE}
+```{r ex-36}
 ggplot(data = penguins) + 
   geom_point(mapping = aes(x = bill_length_mm, y = bill_depth_mm)) +
   coord_cartesian()
@@ -503,13 +503,13 @@ ggplot(data = penguins) +
 
 Pour passer à un système en coordonnées polaires, il y a  `coord_polar()`.
 
-```{r ex-37, echo = TRUE}
+```{r ex-37}
 ggplot(data = penguins) + 
   geom_point(mapping = aes(x = bill_length_mm, y = bill_depth_mm)) +
   coord_polar()
 ```
 
-```{r ex-38, echo = TRUE}
+```{r ex-38}
 ggplot(data = penguins) + 
   geom_bar(mapping = aes(x = species)) +
   coord_polar(theta = "y")
@@ -517,19 +517,19 @@ ggplot(data = penguins) +
 
 Le système de coordonnées permet également de modifier les limites des données ou les limites de l'affichage des données.
 
-```{r ex-39, echo = TRUE}
+```{r ex-39}
 ggplot(data = penguins) + 
   geom_point(mapping = aes(x = bill_length_mm, y = bill_depth_mm)) +
   expand_limits(y = 100)
 ```
 
-```{r ex-40, echo = TRUE}
+```{r ex-40}
 ggplot(data = penguins) + 
   geom_point(mapping = aes(x = bill_length_mm, y = bill_depth_mm)) +
   lims(y = c(NA, 100))
 ```
 
-```{r ex-41, echo = TRUE}
+```{r ex-41}
 ggplot(data = penguins) + 
   geom_point(mapping = aes(x = bill_length_mm, y = bill_depth_mm)) +
   scale_y_continuous(limits = c(NA, 100))
@@ -537,22 +537,22 @@ ggplot(data = penguins) +
 
 Pour agrandir une zone du graphique, l'usage de `coord_cartesian()` est préférable.
 
-```{r ex-42, echo = TRUE}
+```{r ex-42}
 p <- ggplot(data = penguins, mapping = aes(x = bill_length_mm, y = bill_depth_mm)) + 
   geom_point() +
   stat_smooth()
 p
 ```
 
-```{r ex-43, echo = TRUE}
+```{r ex-43}
 p + lims(y = c(18, 20))
 ```
 
-```{r ex-44, echo = TRUE}
+```{r ex-44}
 p + scale_y_continuous(limits = c(18, 20))
 ```
 
-```{r ex-45, echo = TRUE}
+```{r ex-45}
 p + coord_cartesian(ylim = c(18, 20))
 ```
 
@@ -593,7 +593,7 @@ ggplot(data = penguins) +
 
 Le thème (`theme()`) contrôle les éléments du graphique indépendants des données, par exemple, la taille de police.
 
-```{r ex-48, eval = FALSE, echo = TRUE}
+```{r ex-48, eval = FALSE}
 theme_light(
   base_size = ..., 
   base_family = ...
@@ -613,7 +613,7 @@ theme_light(
 * `theme_void()`
 * `theme_test()`
 
-```{r ex-49, echo = TRUE}
+```{r ex-49}
 p <- ggplot(data = penguins) +
   geom_bar(mapping = aes(x = species))
 
@@ -626,7 +626,7 @@ p + theme_void()
 
 Il est possible de définir un thème `ggplot2` pour l'ensemble d'une session R ou d'un script R/Rmd avec `theme_set()`.
 
-```{r ex-50, echo = TRUE}
+```{r ex-50}
 theme_set(theme_dark())
 p
 theme_set(theme_light())
@@ -701,7 +701,7 @@ ggplot(data = penguins)
 #### Corriger les différents "problèmes" du graphique ci dessous.
 
 ```{r ex-55, echo = FALSE, eval = TRUE}
-p54 <- ggplot(data = penguins) +
+p_issues <- ggplot(data = penguins) +
   geom_bar(mapping = aes(x = "penguins", fill = species)) +
   coord_polar(theta = "y") +
   theme(
@@ -711,10 +711,11 @@ p54 <- ggplot(data = penguins) +
     axis.text.x = element_text(angle = 180), 
     legend.text = element_text(angle = 180)
   )
+p_issues
 ```
 
 ```{r ex-56, exercise = TRUE, exercise.lines = 5}
-p54 + theme(
+p_issues + theme(
   
   
   
@@ -747,12 +748,12 @@ D'autres, apportent des thèmes et des fonctionnalités pour combiner plusieurs 
 * [`ggpubr`](https://cran.r-project.org/package=ggpubr)
 * [`patchwork`](https://cran.r-project.org/package=patchwork)
 
-```{r ex-58, echo = TRUE}
+```{r ex-58}
 library("ggpubr")
 ggarrange(p + theme_classic2(), p)
 ```
 
-```{r ex-59, echo = TRUE}
+```{r ex-59}
 library("patchwork")
 p1 <- ggplot(data = penguins) +
   aes(y = sex, fill = species) +
@@ -776,11 +777,11 @@ p5 <- ggplot(data = penguins) +
   geom_histogram(alpha = 0.5, position = "identity")
 ```
 
-```{r ex-60, echo = TRUE}
+```{r ex-60}
 p1 + p2 + p3 + p4 + p5
 ```
 
-```{r ex-61, echo = TRUE}
+```{r ex-61}
 wrap_plots(p1, p2, p3, p4, p5, ncol = 2, nrow = 3, guides = "collect")
 ```
 
