@@ -85,7 +85,12 @@ library("palmerpenguins")
 head(penguins)
 ```
 
-## `ggplot2` "data/mapping/geometries"
+```{r ggplot-theme, include = FALSE}
+theme_set(theme_light())
+```
+
+
+## `ggplot2` - "data/mapping/geometries"
 
 ### **"aesthetics"** (**"mapping"**)
 
@@ -208,7 +213,7 @@ ggplot(data = penguins) +
 **Indice :** `?geom_abline` / `?geom_vline`
 </div>
 
-## `ggplot2` "statistics"
+## `ggplot2` - "statistics"
 
 ### **"statistics"**
 
@@ -284,7 +289,7 @@ ggplot(data = penguins) +
 **Indice :** Il va falloir changer la valeur par défaut du paramètre `geom` de `stat_summary()`.
 </div>
 
-## `ggplot2` "scales"
+## `ggplot2` - "scales"
 
 ### **"scales"**
 
@@ -391,7 +396,7 @@ ggplot(data = penguins) +
 
 Ajouter `guides(colour = "legend")`, que se passe-t-il ?
 
-## `ggplot2` "facets"
+## `ggplot2` - "facets"
 
 ### **"facets"**
 
@@ -483,7 +488,7 @@ ggplot(data = penguins) +
   facet_grid(rows = vars(island), cols = vars(species))
 ```
 
-## `ggplot2` "coordinates"
+## `ggplot2` - "coordinates"
 
 ### **"coordinates"**
 
@@ -583,7 +588,7 @@ ggplot(data = penguins) +
 
 #### Explorer les autres fonctions `coord_*()` disponibles.
 
-## `ggplot2` "theme"
+## `ggplot2` - "theme"
 
 ### **"theme"**
 
