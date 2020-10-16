@@ -9,7 +9,7 @@ Authors@R:
            comment = c(ORCID = "0000-0002-3396-4549"))
 Description: Several training workshops using the 'learnr' R package.
 License: MIT + file LICENSE
-Depends: R (>= 3.6.0)
+Depends: R (>= 3.6)
 Suggests: 
     learnr (>= 0.10.1),
     palmerpenguins (>= 0.1.0),
