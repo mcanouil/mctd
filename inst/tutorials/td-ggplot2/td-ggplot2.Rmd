@@ -1,6 +1,6 @@
 ---
 title: "TD - ggplot2"
-description: "TD de 2 heures autour de l'extension 'ggplot2'."
+description: "Tutoriel de création de graphique autour de l'extension 'ggplot2'."
 author: "Mickaël Canouil, *Ph.D.*"
 output: 
   learnr::tutorial:
@@ -168,48 +168,68 @@ ggplot(data = penguins) +
   geom_point(mapping = aes(x = bill_length_mm, y = bill_depth_mm))
 ```
 
-<div id="ex-07-hint">
-**Indice :** ?geom_point
-</div>
+```{r ex-07-solution}
+ggplot(data = penguins) + 
+  geom_point(
+    mapping = aes(x = bill_length_mm, y = bill_depth_mm),
+    shape = 2, # ?pch
+    size = 3
+  )
+```
 
 * * *
 
-#### Colorer les deux distributions de l'histogramme en fonction de `bill_length_mm`.
+#### Colorer les deux distributions de l'histogramme en fonction de `species`.
 
 ```{r ex-08, exercise = TRUE, exercise.lines = 5}
 ggplot(data = penguins) + 
   geom_histogram(mapping = aes(x = bill_length_mm))
 ```
 
-<div id="ex-08-hint">
-**Indice :** `colour`/`fill`
-</div>
+```{r ex-08-solution}
+ggplot(data = penguins) + 
+  geom_histogram(
+    mapping = aes(
+      x = bill_length_mm, 
+      colour = species
+    )
+  )
+```
 
 * * *
 
-#### Colorer les deux distributions de l'histogramme en fonction de `bill_depth_mm`. Que se passe-t-il ?
+#### Colorer les deux distributions de l'histogramme en fonction de `species`. Que se passe-t-il ?
 
 ```{r ex-09, exercise = TRUE, exercise.lines = 5}
 ggplot(data = penguins) + 
   geom_histogram(mapping = aes(x = bill_length_mm))
 ```
 
-<div id="ex-09-hint">
-**Indice 1 :** `colour` ou `fill` ?  
-**Indice 2 :** Ajouter `position = 'dodge'` dans `geom_histogram()`. Que contrôle `position` ?
-</div>
+```{r ex-09-solution}
+ggplot(data = penguins) + 
+  geom_histogram(
+    mapping = aes(
+      x = bill_length_mm, 
+      fill = species
+    ),
+    position = "dodge"
+  )
+```
 
 * * *
 
-#### Ajouter une ligne verticale qui sépare les deux distributions.
+#### Ajouter une ligne verticale qui sépare les "deux distributions".
 
 ```{r ex-10, exercise = TRUE, exercise.lines = 5}
 ggplot(data = penguins) + 
   geom_point(mapping = aes(x = bill_length_mm, y = bill_depth_mm))
 ```
-<div id="ex-10-hint">
-**Indice :** `?geom_abline` / `?geom_vline`
-</div>
+
+```{r ex-10-solution}
+ggplot(data = penguins) + 
+  geom_point(mapping = aes(x = bill_length_mm, y = bill_depth_mm)) +
+  geom_vline(xintercept = 45)
+```
 
 ## "statistics"
 
@@ -270,9 +290,12 @@ ggplot(data = penguins) +
   geom_bar(mapping = aes(x = species))
 ```
 
-<div id="ex-17-hint">
-**Indice :** `?geom_bar`
-</div>
+```{r ex-17-solution}
+?geom_bar
+
+ggplot(data = penguins) +
+  stat_count(mapping = aes(x = species))
+```
 
 * * *
 
@@ -283,9 +306,12 @@ ggplot(data = penguins) +
   geom_jitter(mapping = aes(x = species, y = bill_length_mm))
 ```
 
-<div id="ex-18-hint">
-**Indice :** Il va falloir changer la valeur par défaut du paramètre `geom` de `stat_summary()`.
-</div>
+```{r ex-18-solution}
+ggplot(data = penguins) +
+  aes(x = species, y = bill_length_mm) +
+  geom_jitter() +
+  stat_summary(fun = mean, shape = 2, geom = "point", size = 4)
+```
 
 ##"scales"
 
@@ -368,13 +394,28 @@ ggplot(data = penguins) +
 
 ```{r ex-25, exercise = TRUE, exercise.lines = 5}
 ggplot(data = penguins) + 
-  geom_point(mapping = aes(x = bill_length_mm, y = bill_depth_mm, colour = species))
+  geom_point(
+    mapping = aes(
+      x = bill_length_mm, 
+      y = bill_depth_mm, 
+      colour = species,
+      size = flipper_length_mm
+    )
+  )
 ```
 
-<div id="ex-25-hint">
-**Indice 1 :** Paramètre `scale_size_binned()`.  
-**Indice 2 :** Paramètre `breaks`.
-</div>
+```{r ex-25-solution}
+ggplot(data = penguins) + 
+  geom_point(
+    mapping = aes(
+      x = bill_length_mm, 
+      y = bill_depth_mm, 
+      colour = species,
+      size = flipper_length_mm
+    )
+  ) +
+  scale_size_binned(breaks = 200)
+```
 
 * * *
 
@@ -387,6 +428,18 @@ ggplot(data = penguins) +
       x = bill_length_mm, 
       y = bill_depth_mm, 
       colour = species,
+      size = flipper_length_mm
+    )
+  )
+```
+
+```{r ex-26-solution}
+ggplot(data = penguins) + 
+  geom_point(
+    mapping = aes(
+      x = bill_length_mm, 
+      y = bill_depth_mm, 
+      colour = flipper_length_mm,
       size = flipper_length_mm
     )
   )
@@ -444,9 +497,15 @@ ggplot(data = penguins) +
   facet_wrap(facets = vars(species))
 ```
 
-<div id="ex-32-hint">
-**Indice :** Paramètres `rows` et `cols`.
-</div>
+```{r ex-32-solution}
+ggplot(data = penguins) + 
+  geom_point(mapping = aes(x = bill_length_mm, y = bill_depth_mm)) +
+  facet_wrap(facets = vars(species), ncol = 1)
+
+ggplot(data = penguins) + 
+  geom_point(mapping = aes(x = bill_length_mm, y = bill_depth_mm)) +
+  facet_wrap(facets = vars(species), nrow = 2, ncol = 2)
+```
 
 * * *
 
@@ -458,9 +517,11 @@ ggplot(data = penguins) +
   facet_wrap(facets = vars(species))
 ```
 
-<div id="ex-33-hint">
-**Indice :** Paramètre `scales`.
-</div>
+```{r ex-33-solution}
+ggplot(data = penguins) + 
+  geom_point(mapping = aes(x = bill_length_mm, y = bill_depth_mm)) +
+  facet_wrap(facets = vars(species), scales = "free")
+```
 
 * * *
 
@@ -472,18 +533,26 @@ ggplot(data = penguins) +
   facet_grid(cols = vars(species))
 ```
 
-<div id="ex-34-hint">
-**Indice :** Paramètre `scales` et `space`.
-</div>
+```{r ex-34-solution}
+ggplot(data = penguins) + 
+  geom_point(mapping = aes(x = bill_length_mm, y = bill_depth_mm)) +
+  facet_grid(cols = vars(species), scales = "free", space = "free")
+```
 
 * * *
 
-#### Reproduire avec `facet_wrap()` le graphique suivant.
+#### Reproduire avec `facet_wrap()` le graphique suivant sans les parties "vides".
 
 ```{r ex-35, exercise = TRUE, exercise.lines = 5}
 ggplot(data = penguins) + 
   geom_point(mapping = aes(x = bill_length_mm, y = bill_depth_mm)) +
   facet_grid(rows = vars(island), cols = vars(species))
+```
+
+```{r ex-35-solution}
+ggplot(data = penguins) + 
+  geom_point(mapping = aes(x = bill_length_mm, y = bill_depth_mm)) +
+  facet_wrap(facets = vars(island, species), nrow = 3)
 ```
 
 ## "coordinates"
@@ -571,16 +640,18 @@ ggplot(data = penguins) +
 
 * * *
 
-#### Les fonctions `coord_*()`, permettent également en plus de modifier les limites, de transformer les **"aesthetics"** avec `coord_trans()` (équivalent au paramètre `trans` des fonctions `scale_*()`). afficher les axes `x` et `y` de façon décroissante.
+#### Les fonctions `coord_*()`, permettent également en plus de modifier les limites, de transformer les **"aesthetics"** avec `coord_trans()` (équivalent au paramètre `trans` des fonctions `scale_*()`). Afficher les axes `x` et `y` de façon décroissante.
 
 ```{r ex-47, exercise = TRUE, exercise.lines = 5}
 ggplot(data = penguins) + 
   geom_point(mapping = aes(x = bill_length_mm, y = bill_depth_mm))
 ```
 
-<div id="ex-47-hint">
-**Indice :** Transformation `"reverse"`.
-</div>
+```{r ex-47-solution}
+ggplot(data = penguins) + 
+  geom_point(mapping = aes(x = bill_length_mm, y = bill_depth_mm)) +
+  coord_trans(x = "reverse", y = "reverse")
+```
 
 * * *
 
@@ -695,6 +766,20 @@ ggplot(data = penguins) +
 ggplot(data = penguins)
 ```
 
+```{r ex-54-solution}
+ggplot(data = penguins) +
+  geom_bar(mapping = aes(x = "penguins", fill = species)) +
+  coord_polar(theta = "y") +
+  theme(
+    axis.title = element_blank(),
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    panel.border = element_blank(),
+    panel.grid = element_blank(), 
+    legend.position = "top"
+  )
+```
+
 * * *
 
 #### Corriger les différents "problèmes" du graphique ci dessous.
@@ -718,6 +803,21 @@ p_issues + theme(
   
   
   
+)
+```
+
+```{r ex-56-solution}
+p_issues + theme(
+  text = element_text(colour = "black"), 
+  plot.background = element_rect(fill = "transparent"), # NA = "transparent"
+  legend.background = element_rect(colour = NA, fill = NA), 
+  legend.text = element_text(angle = 0),
+  axis.title = element_blank(), 
+  axis.text.x = element_text(angle = 0), 
+  axis.text.y = element_blank(), 
+  axis.ticks.y = element_blank(),
+  panel.border = element_blank(),
+  panel.grid = element_blank()
 )
 ```
 
