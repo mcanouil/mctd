@@ -313,7 +313,7 @@ ggplot(data = penguins) +
   stat_summary(fun = mean, shape = 2, geom = "point", size = 4)
 ```
 
-##"scales"
+## "scales"
 
 ### {}
 

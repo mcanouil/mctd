@@ -1,3 +1,8 @@
+# mctrainings 0.1.2
+
+* In `"td-ggplot2"` (`learnr` tutorial),
+    + Fix missing space for "scales" section.
+
 # mctrainings 0.1.1
 
 * In `"td-ggplot2"` (`learnr` tutorial),
